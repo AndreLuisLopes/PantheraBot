@@ -1,40 +1,44 @@
-#PantheraBot - Seu Assistente da FURIA Esports no CS2 🐆
-Um chatbot para Telegram que fornece informações atualizadas sobre o time de Counter-Strike 2 da FURIA, incluindo elenco, próximos jogos, títulos e história.
+# PantheraBot - Seu Assistente da FURIA Esports no CS2 🐆
 
-🔧 Funcionalidades
-✅ Comandos diretos (via /comando):
+Um chatbot para Telegram que fornece **informações atualizadas** sobre o time de **Counter-Strike 2** da **FURIA**, incluindo elenco, próximos jogos, títulos e história da organização.
 
-/start → Mensagem de boas-vindas
+## 🔧 Funcionalidades
 
-/time → Elenco atual da FURIA
+✅ **Comandos diretos** (via `/comando`):
 
-/titulos → Principais conquistas
+- `/start` → Mensagem de boas-vindas  
+- `/time` → Elenco atual da FURIA  
+- `/titulos` → Principais conquistas  
+- `/proximojogo` → Próximas partidas (via HLTV)  
+- `/historia` → História do time  
+- `/redes` → Redes sociais oficiais da FURIA  
 
-/proximojogo → Próximas partidas (via HLTV)
+💬 **Perguntas naturais** (sem comandos):
 
-/historia → História do time
+- **"Quem joga na FURIA?"** → Mostra o elenco atual  
+- **"Quando é o próximo jogo?"** → Exibe a agenda de jogos  
+- **"Quais os títulos da FURIA?"** → Lista dos principais troféus  
 
-/redes → Redes sociais
+⚠️ **Tratamento de erros inteligente**:
 
-💬 Perguntas naturais (sem comandos):
+- Reconhecimento de variações de perguntas  
+- Respostas informativas para comandos inválidos  
 
-"Quem joga na FURIA?" → Mostra o time
+---
 
-"Quando é o próximo jogo?" → Agenda de jogos
+## ⚙️ Tecnologias
 
-"Quais os títulos?" → Lista de troféus
+- **Python 3.10+**
+- [`python-telegram-bot`](https://github.com/python-telegram-bot/python-telegram-bot) (v20+)
+- **Web scraping** de dados do [HLTV.org](https://www.hltv.org/)
+- **Hospedagem**: Render, Heroku ou execução local (polling)
 
-⚠️ Tratamento de erros:
+---
 
-Responde a comandos inválidos com ajuda
+## 🚀 Como usar
 
-Reconhece variações de perguntas
-
-⚙️ Tecnologias
-Python 3.10+
-
-Biblioteca python-telegram-bot (v20+)
-
-Web scraping (HLTV.org)
-
-Hospedagem: Render/Heroku (ou local via polling)
+1. Crie um bot no [BotFather](https://t.me/BotFather) e copie o token.
+2. Clone este repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/antheraBot.git
+   cd antheraBot
