@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 def get_furia_matches():
-    """Busca os próximos jogos da FURIA no HLTV."""
     url = "https://www.hltv.org/matches"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -33,7 +32,7 @@ def get_furia_matches():
                     "url": match_url
                 })
         
-        return matches[:5]  # Retorna no máximo 5 jogos
+        return matches[:5]
         
     except Exception as e:
         print(f"Erro ao acessar HLTV: {e}")

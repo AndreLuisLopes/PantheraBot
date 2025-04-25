@@ -4,7 +4,6 @@ from hltv_integration import get_furia_matches
 import re
 
 async def send_welcome_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Envia mensagem de boas-vindas e comandos"""
     mensagem = """
     🐆 Bem-vindo ao PantheraBot! 🐆
     Seu radar oficial da FURIA no Counter-Strike!
@@ -54,7 +53,6 @@ async def mostrar_titulos(update: Update, contexto: ContextTypes.DEFAULT_TYPE):
     await contexto.bot.send_message(chat_id=update.effective_chat.id, text=titulos)
 
 async def proximo_jogo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Comando /proximojogo"""
     matches = get_furia_matches()
     
     if not matches:
@@ -117,10 +115,8 @@ async def mostrar_redes(update: Update, contexto: ContextTypes.DEFAULT_TYPE):
     await contexto.bot.send_message(chat_id=update.effective_chat.id, text=redes)
 
 async def handle_text_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Processa mensagens normais (sem comandos)"""
     user_message = update.message.text.lower()
     
-    # Expressões regulares para reconhecer perguntas
     if re.search(r"(time|elenco|jogador|quem joga)", user_message):
         await mostrar_time(update, context)
     
@@ -149,7 +145,6 @@ async def handle_text_messages(update: Update, context: ContextTypes.DEFAULT_TYP
         )
 
 async def comando_invalido(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Responde a comandos não reconhecidos"""
     await update.message.reply_text(
         "⚠️ *Comando inválido!* ⚠️\n\n"
         "Os comandos disponíveis são:\n"
