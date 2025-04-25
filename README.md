@@ -31,7 +31,6 @@ Um chatbot para Telegram que fornece **informações atualizadas** sobre o time 
 - **Python 3.10+**
 - [`python-telegram-bot`](https://github.com/python-telegram-bot/python-telegram-bot) (v20+)
 - **Web scraping** de dados do [HLTV.org](https://www.hltv.org/)
-- **Hospedagem**: Render, Heroku ou execução local (polling)
 
 ---
 
