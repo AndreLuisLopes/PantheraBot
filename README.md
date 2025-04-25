@@ -35,10 +35,6 @@ Um chatbot para Telegram que fornece **informações atualizadas** sobre o time 
 
 ---
 
-## 🚀 Como usar
-
-1. Crie um bot no [BotFather](https://t.me/BotFather) e copie o token.
-2. Clone este repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/antheraBot.git
-   cd antheraBot
+## 👤 Autor
+Desenvolvido com foco na comunidade de fãs da FURIA por André Luís Lopes
+🔗 [GitHub](https://github.com/AndreLuisLopes) • [Linkedin](https://www.linkedin.com/in/andre-luis-lopes/)
