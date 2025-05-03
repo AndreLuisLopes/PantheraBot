@@ -181,25 +181,25 @@ async def mostrar_redes(update: Update, contexto: ContextTypes.DEFAULT_TYPE):
 async def handle_text_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text.lower()
     
-    if re.search(r"(time|elenco|jogador|quem joga)", user_message):
+    if re.search(r"(time|elenco|jogador|quem joga|Quem atua|line|line-up|line up)", user_message):
         await mostrar_time(update, context)
     
-    elif re.search(r"(pr[óo]ximo jogo|quando joga|calend[aá]rio)", user_message):
+    elif re.search(r"(pr[óo]ximo jogo|pr[óo]ximos jogos|quando joga|calend[aá]rio)", user_message):
         await proximo_jogo(update, context)
     
-    elif re.search(r"(t[ií]tulo|conquista|troféu)", user_message):
+    elif re.search(r"(t[ií]tulo|conquista|conquistas|troféu)", user_message):
         await mostrar_titulos(update, context)
     
-    elif re.search(r"(hist[óo]ria|cria[cç][aã]o)", user_message):
+    elif re.search(r"(hist[óo]ria|cria[cç][aã]o|conte mais sobre|me fale mais sobre)", user_message):
         await mostrar_historia(update, context)
     
     elif re.search(r"(redes|social|twitter|instagram)", user_message):
         await mostrar_redes(update, context)
     
-    elif re.search(r"(contato|whatsapp|assistente|beta|fechado)", user_message):
+    elif re.search(r"(contato|whatsapp|assistente|beta|fechado|Wpp|wpp)", user_message):
         await contato_furia(update, context)
 
-    elif re.search(r"\b(live|agora|jogo ao vivo|placar|ao vivo)\b", user_message):
+    elif re.search(r"\b(live|agora|jogo ao vivo|placar|ao vivo|jogo em andamento|jogos em andamento)\b", user_message):
         await live_status(update, context)
     
     else:
