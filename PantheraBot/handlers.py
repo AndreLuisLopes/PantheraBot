@@ -72,7 +72,6 @@ torcida_messages = [
 ]
 
 async def simular_torcida(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Ativa o modo torcida"""
     context.user_data['torcida_mode'] = True
     await update.message.reply_text(
         "🔊 Modo Torcida Ativado! A cada atualização do jogo, enviaremos mensagens de incentivo!\n"
@@ -82,7 +81,6 @@ async def simular_torcida(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(choice(torcida_messages))
 
 async def stop_torcida(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Desativa o modo torcida"""
     context.user_data['torcida_mode'] = False
     await update.message.reply_text("🔇 Modo Torcida Desativado")
 async def proximo_jogo(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -104,7 +102,6 @@ async def proximo_jogo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(resposta, parse_mode="Markdown")
 
 async def live_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Mostra status de jogos ao vivo"""
     try:
         matches = get_live_furia_matches()
         

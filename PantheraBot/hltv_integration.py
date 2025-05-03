@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 def get_furia_matches():
-    """Busca próximos jogos da FURIA (existente)"""
     url = "https://www.hltv.org/matches"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -40,7 +39,6 @@ def get_furia_matches():
         return None
 
 def get_live_furia_matches():
-    """Busca jogos ao vivo da FURIA com placar atual"""
     url = "https://www.hltv.org/matches"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -52,17 +50,14 @@ def get_live_furia_matches():
         
         live_matches = []
         
-        # Partidas ao vivo têm a classe 'liveMatch'
         for match in soup.find_all("div", class_="liveMatch"):
             team1 = match.find("div", class_="team").get_text(strip=True)
             team2 = match.find_all("div", class_="team")[1].get_text(strip=True)
             
             if "FURIA" in team1 or "FURIA" in team2:
-                # Extrai o placar
                 score1 = match.find("div", class_="team1-gradient").get_text(strip=True)
                 score2 = match.find("div", class_="team2-gradient").get_text(strip=True)
                 
-                # Extrai informações adicionais
                 event = match.find("div", class_="event").get_text(strip=True)
                 map_ = match.find("div", class_="map").get_text(strip=True)
                 match_url = f"https://hltv.org{match.find('a')['href']}"
