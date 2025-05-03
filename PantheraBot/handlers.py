@@ -1,7 +1,8 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
-from hltv_integration import get_furia_matches
+from hltv_integration import get_furia_matches, get_live_furia_matches
 import re
+from random import choice
 
 async def send_welcome_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mensagem = """
@@ -10,17 +11,24 @@ async def send_welcome_message(update: Update, context: ContextTypes.DEFAULT_TYP
 
     💬 Você pode perguntar diretamente:
     - "Quem joga na FURIA?"
+    - "Status de jogos ao vivo"
     - "Quando é o próximo jogo?"
     - "Mostre os títulos"
     - "História da FURIA"
     - "Redes sociais"
+    - "Contato da Furia"
 
     📌 Ou use comandos:
     /time - Elenco atual
     /titulos - Principais títulos
+    /live - Status de jogos ao vivo
     /proximojogo - Próximos jogos
     /historia - História do time
     /redes - Redes sociais
+    /contato - Contato Inteligente da FURIA (Closed Beta)
+    /torcida - Modo Torcida
+    /stoptorcida - Desativa o Modo Torcida
+
     """
     await context.bot.send_message(chat_id=update.effective_chat.id, text=mensagem)
 
@@ -52,6 +60,31 @@ async def mostrar_titulos(update: Update, contexto: ContextTypes.DEFAULT_TYPE):
     """
     await contexto.bot.send_message(chat_id=update.effective_chat.id, text=titulos)
 
+torcida_messages = [
+    "🔥 FURIA VAMO CARALHO!",
+    "🐆 PANTERA NA ÁREA!",
+    "BORA TIME! ESSA É NOSSA!",
+    "VAMO FURIA! DÁ PRÁ GANHAR!",
+    "OLHA A FURIA CHEGANDO!",
+    "É CAMPEÃO! É CAMPEÃO!",
+    "ARRASTA ESSA PORRA!",
+    "TÁ LISO! TÁ LISO!"
+]
+
+async def simular_torcida(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Ativa o modo torcida"""
+    context.user_data['torcida_mode'] = True
+    await update.message.reply_text(
+        "🔊 Modo Torcida Ativado! A cada atualização do jogo, enviaremos mensagens de incentivo!\n"
+        "Use /stoptorcida para desativar."
+    )
+    
+    await update.message.reply_text(choice(torcida_messages))
+
+async def stop_torcida(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Desativa o modo torcida"""
+    context.user_data['torcida_mode'] = False
+    await update.message.reply_text("🔇 Modo Torcida Desativado")
 async def proximo_jogo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     matches = get_furia_matches()
     
@@ -69,6 +102,40 @@ async def proximo_jogo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     
     await update.message.reply_text(resposta, parse_mode="Markdown")
+
+async def live_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Mostra status de jogos ao vivo"""
+    try:
+        matches = get_live_furia_matches()
+        
+        if not matches:
+            await update.message.reply_text(
+                "🔴 Nenhum jogo da FURIA está acontecendo agora.\n"
+                "Use /proximojogo para ver as próximas partidas."
+            )
+            return
+        
+        resposta = "🎮 *JOGOS AO VIVO DA FURIA* 🎮\n\n"
+        
+        for match in matches:
+            resposta += (
+                f"⚔️ *{match['team1']} {match['score1']} - {match['score2']} {match['team2']}*\n"
+                f"🗺️ Mapa: {match['map']}\n"
+                f"🏆 {match['event']}\n"
+                f"🔴 {match['status']}\n"
+                f"📊 [Detalhes]({match['url']})\n"
+                f"📡 [Twitch da FURIA](https://www.twitch.tv/furia)\n\n"
+            )
+        
+        await update.message.reply_text(resposta, parse_mode="Markdown")
+        
+    except Exception as e:
+        print(f"Erro no live status: {e}")
+        await update.message.reply_text(
+            "⚠️ Não consegui verificar os jogos ao vivo agora.\n"
+            "Tente novamente mais tarde ou confira diretamente:\n"
+            "https://www.hltv.org/matches"
+        )
 
 async def mostrar_historia(update: Update, contexto: ContextTypes.DEFAULT_TYPE):
     historia = """
@@ -132,13 +199,21 @@ async def handle_text_messages(update: Update, context: ContextTypes.DEFAULT_TYP
     elif re.search(r"(redes|social|twitter|instagram)", user_message):
         await mostrar_redes(update, context)
     
+    elif re.search(r"(contato|whatsapp|assistente|beta|fechado)", user_message):
+        await contato_furia(update, context)
+
+    elif re.search(r"\b(live|agora|jogo ao vivo|placar|ao vivo)\b", user_message):
+        await live_status(update, context)
+    
     else:
         await update.message.reply_text(
             "🤔 Não entendi sua pergunta sobre a FURIA. Veja o que eu sei responder:\n\n"
             "• Time atual → 'Quem joga na FURIA?'\n"
+            "• Jogos Ao Vivo → 'Está tendo jogo agora?'\n"
             "• Próximos jogos → 'Quando é o próximo jogo?'\n"
             "• Títulos → 'Quais os troféus da FURIA?'\n"
             "• História → 'Conte a história do time'\n"
+            "• Contato → 'Qual o contato da Furia?'\n"
             "• Redes sociais → 'Onde acompanhar a FURIA?'\n\n"
             "Ou use os comandos: /time, /proximojogo, /titulos",
             parse_mode="Markdown"
@@ -149,12 +224,34 @@ async def comando_invalido(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "⚠️ *Comando inválido!* ⚠️\n\n"
         "Os comandos disponíveis são:\n"
         "▸ /time - Elenco atual\n"
+        "▸ /live - Status Partidas em Andamento\n"
         "▸ /proximojogo - Próximas partidas\n"
         "▸ /titulos - Conquistas\n"
         "▸ /historia - História do time\n"
-        "▸ /redes - Redes sociais\n\n"
+        "▸ /redes - Redes sociais\n"
+        "▸ /torcida - Ativa Modo Torcida\n"
+        "▸ /stoptorcida - Desativa Modo Torcida\n"
+        "▸ /contato - Contato Inteligente da FURIA (Closed Beta)\n\n"
         "Ou pergunte naturalmente: *\"Quem joga na FURIA?\"*",
         parse_mode="Markdown"
     )
+
+async def contato_furia(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Mostra informações do contato inteligente"""
+    contact_info = """
+    📞 *Contato Inteligente da FURIA (Closed Beta)*
+    
+    Experimente nosso assistente oficial no WhatsApp:
+    👉 [Clique aqui](https://wa.me/5511993404466)
+    
+    Funcionalidades:
+    - Notícias exclusivas
+    - Interação personalizada
+    - Acesso antecipado a conteúdos
+    
+    *Status atual:* Beta Fechado
+    """
+    await update.message.reply_text(contact_info, parse_mode="Markdown")
+
 
 print("O seu BOT está funcionando!!")
